@@ -1,20 +1,141 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="container">
+
+  <header>
+    <div class="pure-g notelist__header">
+      <div class="pure-u-17-24 notelist__appname">Note list simple app</div>
+      <div class="pure-u-3-24 notelist__useremail" [ngClass]="{'hidden': !currentUser}">{{ !currentUser ? '' : currentUser.email }}</div>
+      <div class="pure-u-3-24 notelist__signout" [ngClass]="{'hidden': !currentUser}">
+        <a href="#" class="pure-button notelist__signout" (click)="signOut()">Sign Out</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div [ngClass]="{'hidden': currentUser}">
+      <form class="auth pure-form" [formGroup]="form">
+        <div class="auth__title">Авторизация</div>
+        <input class="auth__email" name="email" id="email" type="text"
+               placeholder="Email" formControlName="email"
+               [ngClass]="{'auth__error': form.get('email').invalid && form.get('email').touched}"
+        >
+        <span class="auth__error_red"
+          *ngIf="form.get('email').invalid && form.get('email').touched"
+        >
+          <span *ngIf="form.get('email')['errors']['required']">Email не может быть пустым. </span>
+          <span *ngIf="form.get('email')['errors']['email']">Введите корректный email. </span>
+        </span>
+        <input class="auth__password" id="password" name="password" type="password"
+               placeholder="password" formControlName="password"
+               [ngClass]="{'auth__error': form.get('password').invalid && form.get('password').touched}"
+        >
+        <span class="auth__error_red"
+          *ngIf="form.get('password').invalid && form.get('password').touched"
+        >
+          <span *ngIf="form.get('password')['errors']['required']">Пароль не может быть пустым. </span>
+          <span *ngIf="form.get('password')['errors']['minlength'] && form.get('password')['errors']['minlength']['requiredLength']">
+            Пароль должен быть больше
+            {{ form.get('password')['errors']['minlength']['requiredLength'] }}
+            символов. Сейчас {{ form.get('password')['errors']['minlength']['actualLength'] }}.
+          </span>
+       </span>
+        <div>
+          <button class="auth__signin pure-button pure-button-primary" id="quickstart-sign-in"
+                  name="signin" type="submit" (click)="signIn()" [disabled]="form.invalid">Вход</button>
+          <button class="auth__signup pure-button pure-button-primary" id="quickstart-sign-up"
+                  name="signup" type="submit" (click)="signUp()" [disabled]="form.invalid">Регистрация</button>
+        </div>
+      </form>
+    </div>
+
+    <div [ngClass]="{'hidden': !currentUser}">
+
+
+      <div class="pure-g notelist">
+        <div class="pure-u-1-5 pure-u-md-1-5 notelist__column notelist__title">Дата</div>
+        <div class="pure-u-1-5 pure-u-md-1-5 notelist__column notelist__title">Прошло времени</div>
+        <div class="pure-u-1-5 pure-u-md-1-5 notelist__column notelist__title">Название</div>
+        <div class="pure-u-2-5 pure-u-md-2-5 notelist__column notelist__title">Описание</div>
+      </div>
+
+      <div class="pure-g" *ngFor="let item of notes_list">
+        <div class="pure-u-1">
+          <div class="pure-g notelist">
+            <div class="pure-u-1-5 pure-u-md-1-5 notelist__column notelist__content">{{item.value.localDate}}</div>
+            <div class="pure-u-1-5 pure-u-md-1-5 notelist__column notelist__content">{{item.value.estimate}}</div>
+            <div class="pure-u-1-5 pure-u-md-1-5 notelist__column notelist__content">{{item.value.title}}</div>
+            <div class="pure-u-2-5 pure-u-md-2-5 notelist__column notelist__content">
+              <div class="pure-g">
+                <div class="pure-u-20-24 pure-u-md-22-24">{{item.value.discription}}</div>
+                <div class="pure-u-2-24 pure-u-md-2-24">
+                  <label [for]="item.key">Edit</label>
+                </div>
+                <div class="pure-u-2-24 pure-u-md-2-24">
+                  <label (click)="removeNote(item.key)">Del</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input class="checker" type="checkbox" [id]="item.key" hidden="">
+          <div class="modal">
+            <div class="modal-body">
+              <div class="modal-content">
+                <div class="pure-g">
+                  <div class="pure-u-1">
+                    <div class="hidden">{{ item.key }}</div>
+                    <div class="pure-group pure-form">
+                      <input class="pure-input-1" type="text"
+                             placeholder="Название" [value]="item.value.title"
+                             (keyup)="currentTitle=$event.target.value"
+                      >
+                      <textarea class="pure-input-1" placeholder="Описание"
+                                (keyup)="currentDescription=$event.target.value"
+                      >{{ item.value.discription }}</textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <label class="notelist__add notelist__button" [for]="item.key"
+                       (click)="updateNote($event)">Ok</label>
+                <label class="notelist__button" [for]="item.key">Close</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1">
+          <label class="notelist__button" for="new">Новая</label>
+          <input class="checker" type="checkbox" id="new" hidden="">
+          <div class="modal">
+            <div class="modal-body">
+              <div class="modal-content">
+                <div class="pure-g">
+                  <div class="pure-u-1">
+                    <form class="pure-form" id="formNew">
+                      <div class="hidden">new</div>
+                      <fieldset class="pure-group">
+                        <input class="pure-input-1" type="text" placeholder="Название" #titlenew>
+                        <textarea class="pure-input-1" type="text" placeholder="Описание" #descriptionnew></textarea>
+                      </fieldset>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <label class="notelist__add notelist__button" for="new"
+                       (click)="addNewNote(titlenew.value, descriptionnew.value)">Ok</label>
+                <label class="notelist__button" for="new">Close</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+  </main>
+
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 

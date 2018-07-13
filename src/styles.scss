@@ -1,0 +1,127 @@
+body {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: auto;
+}
+
+label {
+  display: inline-block;
+  color: #fff;
+  padding: 10px 15px;
+  background-color: rgb(3, 155, 229);
+  border-color: rgb(3, 155, 229);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checker:checked+.modal {
+  display: flex;
+}
+
+.modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  background-color: rgba(0, 0, 0, .4);
+}
+
+.modal-body {
+  width: 400px;
+  height: 75%;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.modal-content {
+  padding: 15px;
+}
+
+.modal-footer {
+  overflow: hidden;
+}
+
+.notelist {
+  &__header {
+    color: #ffffff;
+    margin-bottom: 20px;
+    background: rgb(3, 155, 229);
+    vertical-align: middle;
+  }
+  &__appname {
+    margin-left: 5px;
+    padding: 1em 0;
+  }
+  &__useremail {
+    padding: 1em 0;
+  }
+  &__signout {
+    background: rgb(3, 155, 229) !important;
+    color: #ffffff !important;
+    padding: .5em 0;
+  }
+}
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__email {
+    margin-top: 10px;
+  }
+  &__password {
+    margin-top: 10px;
+  }
+  &__signin {
+    margin: 10px;
+  }
+  &__signup {
+    margin: 10px;
+  }
+  &__auth-hide {
+    display: none;
+  }
+  &__title {
+    margin-top: 20px;
+  }
+  &__error {
+    border-color: red !important;
+  }
+  &__error_red {
+    color: red;
+  }
+}
+
+.notelist {
+  &__column {
+    border: 1px solid #ccc;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+  &__title {
+    margin-top: 20px;
+    text-align: center;
+    color: #1a1cdd;
+  }
+  &__add {
+    margin: auto;
+  }
+  &__content {
+    color: black;
+  }
+  &__button {
+    margin: 20px 5px 0 5px;
+    //margin-top: 20px;
+  }
+}
+
+textarea {
+  resize: none !important;
+  height: 250px !important;
+}
